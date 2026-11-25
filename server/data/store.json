@@ -1,0 +1,282 @@
+{
+  "admins": [
+    {
+      "_id": "6b06c7a5c2a4b2f83c9d38e0",
+      "name": "Scheme Administrator",
+      "email": "admin@juddihs.com",
+      "password": "$2b$12$l..bptUk4JiqduCglVtGXePckF/RfgAeNqBWJYRDA1DcoS9JfJ17W",
+      "createdAt": "2026-11-25T11:33:57.107Z",
+      "updatedAt": "2026-11-25T11:42:22.032Z"
+    }
+  ],
+  "plots": [
+    {
+      "title": "Sea Breeze 2,275 sq ft Residential Plot",
+      "plotNumber": "A-104",
+      "lengthFt": 35,
+      "widthFt": 65,
+      "areaSqFt": 2275,
+      "pricePerSqFt": 1978.02,
+      "dimensions": "35 x 65 ft",
+      "size": "2,275 sq ft",
+      "block": "Block A",
+      "category": "Residential",
+      "price": 4500000,
+      "facing": "Park Facing",
+      "description": "Prime 2,275 sq ft residential plot situated in Block A along a 60-foot carpeted avenue, offering unobstructed coastal breeze and immediate proximity to the Central Mosque and Family Park.",
+      "features": [
+        "60 ft Paved Boulevard",
+        "Underground Electricity Ready",
+        "Clean Municipal Water Line",
+        "Adjacent to Central Park",
+        "24/7 Gated Security"
+      ],
+      "images": [
+        {
+          "url": "/src/assets/images/residential_villa_plot_1795441093419.jpg",
+          "publicId": "seed:residential_1"
+        },
+        {
+          "url": "/src/assets/images/colony_boulevard_gate_1795441093203.jpg",
+          "publicId": "seed:boulevard_1"
+        }
+      ],
+      "status": "Available",
+      "_id": "6b06c70f40a23383363a1161",
+      "createdAt": "2026-11-25T11:31:27.221Z",
+      "updatedAt": "2026-11-25T11:31:27.221Z"
+    },
+    {
+      "title": "Coastal Corner 4,500 sq ft Villa Plot",
+      "plotNumber": "A-201",
+      "lengthFt": 50,
+      "widthFt": 90,
+      "areaSqFt": 4500,
+      "pricePerSqFt": 1955.56,
+      "dimensions": "50 x 90 ft",
+      "size": "4,500 sq ft",
+      "block": "Block A",
+      "category": "Residential",
+      "price": 8800000,
+      "facing": "Corner · Main Boulevard",
+      "description": "Prestigious 4,500 sq ft corner residential plot designed for custom coastal villa construction, positioned near the grand scheme entrance with extra corner frontage.",
+      "features": [
+        "Corner Dual-Road Access",
+        "80 ft Main Boulevard Proximity",
+        "Elevated Coastal Views",
+        "Sewerage & Storm Drainage",
+        "Clear Title & Possession Ready"
+      ],
+      "images": [
+        {
+          "url": "/src/assets/images/residential_villa_plot_1795441093419.jpg",
+          "publicId": "seed:residential_2"
+        },
+        {
+          "url": "/src/assets/images/colony_masterplan_aerial_1795441093561.jpg",
+          "publicId": "seed:masterplan_2"
+        }
+      ],
+      "status": "Available",
+      "_id": "6b06c70fa7fec5d3314d7372",
+      "createdAt": "2026-11-25T11:31:27.221Z",
+      "updatedAt": "2026-11-25T11:31:27.221Z"
+    },
+    {
+      "title": "Pasni Heritage 1,125 sq ft Family Plot",
+      "plotNumber": "B-042",
+      "lengthFt": 25,
+      "widthFt": 45,
+      "areaSqFt": 1125,
+      "pricePerSqFt": 2177.78,
+      "dimensions": "25 x 45 ft",
+      "size": "1,125 sq ft",
+      "block": "Block B",
+      "category": "Residential",
+      "price": 2450000,
+      "facing": "East Open",
+      "description": "Well-proportioned 1,125 sq ft residential plot in peaceful Block B, ideal for modern family homes with walking distance to community school and neighborhood green belt.",
+      "features": [
+        "40 ft Carpeted Street",
+        "Near Community School",
+        "Reliable Electricity Grid",
+        "Dedicated Water Supply"
+      ],
+      "images": [
+        {
+          "url": "/src/assets/images/residential_villa_plot_1795441093419.jpg",
+          "publicId": "seed:residential_3"
+        }
+      ],
+      "status": "Available",
+      "_id": "6b06c70fe8d9b20c5a779a32",
+      "createdAt": "2026-11-25T11:31:27.221Z",
+      "updatedAt": "2026-11-25T11:31:27.221Z"
+    },
+    {
+      "title": "Horizon 700 sq ft Starter Home Plot",
+      "plotNumber": "B-118",
+      "lengthFt": 20,
+      "widthFt": 35,
+      "areaSqFt": 700,
+      "pricePerSqFt": 2214.29,
+      "dimensions": "20 x 35 ft",
+      "size": "700 sq ft",
+      "block": "Block B",
+      "category": "Residential",
+      "price": 1550000,
+      "facing": "North Facing",
+      "description": "Accessible 700 sq ft residential plot crafted for young families and long-term coastal investors seeking high appreciation in Gwadar Old City, Gwadar.",
+      "features": [
+        "30 ft Paved Street",
+        "Street Lighting Installed",
+        "Gated Community Patrol",
+        "Low Maintenance Frontage"
+      ],
+      "images": [
+        {
+          "url": "/src/assets/images/colony_boulevard_gate_1795441093203.jpg",
+          "publicId": "seed:boulevard_4"
+        }
+      ],
+      "status": "Available",
+      "_id": "6b06c70f0b273b4d72788a26",
+      "createdAt": "2026-11-25T11:31:27.221Z",
+      "updatedAt": "2026-11-25T11:31:27.221Z"
+    },
+    {
+      "title": "Gwadar Old City 1,800 sq ft Commercial Plot",
+      "plotNumber": "C-008",
+      "lengthFt": 40,
+      "widthFt": 45,
+      "areaSqFt": 1800,
+      "pricePerSqFt": 6944.44,
+      "dimensions": "40 x 45 ft",
+      "size": "1,800 sq ft",
+      "block": "Commercial Enclave",
+      "category": "Commercial",
+      "price": 12500000,
+      "facing": "Main Boulevard",
+      "description": "High-visibility 1,800 sq ft commercial plot fronting the 100-foot main commercial boulevard, approved for multi-story retail showrooms, banking branches, and corporate offices.",
+      "features": [
+        "100 ft Main Commercial Boulevard",
+        "Dedicated Visitor Parking Strip",
+        "High Footfall Gateway Zone",
+        "Three-Phase Commercial Power"
+      ],
+      "images": [
+        {
+          "url": "/src/assets/images/commercial_plaza_plot_1795441093119.jpg",
+          "publicId": "seed:commercial_1"
+        },
+        {
+          "url": "/src/assets/images/colony_boulevard_gate_1795441093203.jpg",
+          "publicId": "seed:boulevard_5"
+        }
+      ],
+      "status": "Available",
+      "_id": "6b06c70fdc7447182340d3e5",
+      "createdAt": "2026-11-25T11:31:27.221Z",
+      "updatedAt": "2026-11-25T11:31:27.221Z"
+    },
+    {
+      "title": "Makran Business 900 sq ft Retail Plot",
+      "plotNumber": "C-019",
+      "lengthFt": 25,
+      "widthFt": 36,
+      "areaSqFt": 900,
+      "pricePerSqFt": 7555.56,
+      "dimensions": "25 x 36 ft",
+      "size": "900 sq ft",
+      "block": "Commercial Enclave",
+      "category": "Commercial",
+      "price": 6800000,
+      "facing": "Boulevard Facing",
+      "description": "Compact 900 sq ft commercial plot tailored for retail outlets, pharmacies, cafes, and regional logistics offices serving Gwadar Old City, Gwadar.",
+      "features": [
+        "Wide Pedestrian Promenade",
+        "Modern Sewerage & Utilities",
+        "High Rental Yield Potential",
+        "24/7 Commercial Security"
+      ],
+      "images": [
+        {
+          "url": "/src/assets/images/commercial_plaza_plot_1795441093119.jpg",
+          "publicId": "seed:commercial_2"
+        }
+      ],
+      "status": "Reserved",
+      "_id": "6b06c70f09e1c3b5890d3579",
+      "createdAt": "2026-11-25T11:31:27.221Z",
+      "updatedAt": "2026-11-25T11:31:27.221Z"
+    },
+    {
+      "title": "Arabian View 2,275 sq ft Mixed-Use Corner",
+      "plotNumber": "M-003",
+      "lengthFt": 35,
+      "widthFt": 65,
+      "areaSqFt": 2275,
+      "pricePerSqFt": 4131.87,
+      "dimensions": "35 x 65 ft",
+      "size": "2,275 sq ft",
+      "block": "Block C",
+      "category": "Mixed Use",
+      "price": 9400000,
+      "facing": "Corner · Coastal Avenue",
+      "description": "Versatile 2,275 sq ft mixed-use corner plot approved for ground-floor retail storefronts with luxury residential apartments or boutique guest suites above.",
+      "features": [
+        "Ground Retail + Upper Residential Zoning",
+        "Corner Exposure on 80 ft Avenue",
+        "Fiber & Utility Conduits Ready",
+        "Walking Distance to Mosque & Park"
+      ],
+      "images": [
+        {
+          "url": "/src/assets/images/mixed_use_corner_plot_1795441093434.jpg",
+          "publicId": "seed:mixed_1"
+        },
+        {
+          "url": "/src/assets/images/commercial_plaza_plot_1795441093119.jpg",
+          "publicId": "seed:commercial_3"
+        }
+      ],
+      "status": "Available",
+      "_id": "6b06c70f045fa3ccfe360a84",
+      "createdAt": "2026-11-25T11:31:27.221Z",
+      "updatedAt": "2026-11-25T11:31:27.221Z"
+    },
+    {
+      "title": "Gateway Arcade 1,350 sq ft Mixed-Use Plot",
+      "plotNumber": "M-014",
+      "lengthFt": 30,
+      "widthFt": 45,
+      "areaSqFt": 1350,
+      "pricePerSqFt": 4370.37,
+      "dimensions": "30 x 45 ft",
+      "size": "1,350 sq ft",
+      "block": "Block C",
+      "category": "Mixed Use",
+      "price": 5900000,
+      "facing": "Main Sector Road",
+      "description": "Strategic 1,350 sq ft mixed-use plot balancing commercial shopfront income with upper-level family living quarters in rapidly developing Block C.",
+      "features": [
+        "Dual Residential-Commercial Approval",
+        "60 ft Sector Boulevard Access",
+        "Ample Roadside Parking",
+        "Modern Infrastructure Grid"
+      ],
+      "images": [
+        {
+          "url": "/src/assets/images/mixed_use_corner_plot_1795441093434.jpg",
+          "publicId": "seed:mixed_2"
+        }
+      ],
+      "status": "Available",
+      "_id": "6b06c70f2513543747f8b441",
+      "createdAt": "2026-11-25T11:31:27.221Z",
+      "updatedAt": "2026-11-25T11:31:27.221Z"
+    }
+  ],
+  "orders": [],
+  "payments": []
+}
