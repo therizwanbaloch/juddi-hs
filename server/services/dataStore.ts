@@ -18,6 +18,7 @@ import { PlotCategory, PlotModel, PlotStatus } from '../models/Plot.js';
 export interface PlotQueryFilters {
   category?: string;
   size?: string;
+  dimensions?: string;
   block?: string;
   status?: string;
   minPrice?: number;
@@ -165,6 +166,19 @@ export async function updateAdminPassword(
 
 // ---------------- PLOT OPERATIONS ----------------
 
+function parseDimensionsQuery(input: string): { lengthFt: number; widthFt: number } | null {
+  const match = input.match(/(\d+(?:\.\d+)?)\s*[x×]\s*(\d+(?:\.\d+)?)/i);
+  if (!match) return null;
+  const lengthFt = Number(match[1]);
+  const widthFt = Number(match[2]);
+  if (!Number.isFinite(lengthFt) || !Number.isFinite(widthFt)) return null;
+  return { lengthFt, widthFt };
+}
+
+function formatDimensionsLabel(lengthFt: number, widthFt: number): string {
+  return `${lengthFt} × ${widthFt} ft`;
+}
+
 export async function queryPlots(filters: PlotQueryFilters): Promise<{
   plots: StoredPlot[];
   total: number;
@@ -173,6 +187,12 @@ export async function queryPlots(filters: PlotQueryFilters): Promise<{
   facets: {
     blocks: string[];
     sizes: string[];
+    dimensions: string[];
+    categoryCounts: {
+      Residential: number;
+      Commercial: number;
+      'Mixed Use': number;
+    };
   };
 }> {
   const page = Math.max(1, Number(filters.page) || 1);
@@ -185,6 +205,15 @@ export async function queryPlots(filters: PlotQueryFilters): Promise<{
     }
     if (filters.size && filters.size !== 'All') {
       query.size = filters.size;
+    }
+    if (filters.dimensions && filters.dimensions !== 'All') {
+      const parsed = parseDimensionsQuery(filters.dimensions);
+      if (parsed) {
+        query.lengthFt = parsed.lengthFt;
+        query.widthFt = parsed.widthFt;
+      } else {
+        query.dimensions = filters.dimensions;
+      }
     }
     if (filters.block && filters.block !== 'All') {
       query.block = filters.block;
@@ -230,7 +259,7 @@ export async function queryPlots(filters: PlotQueryFilters): Promise<{
       ];
     }
 
-    const [total, docs, allBlocks, allSizes] = await Promise.all([
+    const [total, docs, allBlocks, allSizes, allMeta] = await Promise.all([
       PlotModel.countDocuments(query),
       PlotModel.find(query)
         .sort({ createdAt: -1 })
@@ -238,7 +267,34 @@ export async function queryPlots(filters: PlotQueryFilters): Promise<{
         .limit(limit),
       PlotModel.distinct('block'),
       PlotModel.distinct('size'),
+      PlotModel.find({}, { lengthFt: 1, widthFt: 1, category: 1 }).lean(),
     ]);
+
+    const dimMap = new Map<string, number>();
+    const categoryCounts = {
+      Residential: 0,
+      Commercial: 0,
+      'Mixed Use': 0,
+    };
+
+    for (const item of allMeta as Array<{
+      lengthFt?: number;
+      widthFt?: number;
+      category?: string;
+    }>) {
+      if (item.category === 'Residential') categoryCounts.Residential += 1;
+      else if (item.category === 'Commercial') categoryCounts.Commercial += 1;
+      else if (item.category === 'Mixed Use') categoryCounts['Mixed Use'] += 1;
+
+      if (item.lengthFt && item.widthFt) {
+        const label = formatDimensionsLabel(item.lengthFt, item.widthFt);
+        dimMap.set(label, item.lengthFt * item.widthFt);
+      }
+    }
+
+    const sortedDimensions = Array.from(dimMap.entries())
+      .sort((a, b) => a[1] - b[1])
+      .map(([label]) => label);
 
     return {
       plots: docs.map((d) => normalizeDoc<StoredPlot>(d)),
@@ -248,6 +304,8 @@ export async function queryPlots(filters: PlotQueryFilters): Promise<{
       facets: {
         blocks: (allBlocks as string[]).sort(),
         sizes: (allSizes as string[]).sort(),
+        dimensions: sortedDimensions,
+        categoryCounts,
       },
     };
   }
@@ -255,6 +313,21 @@ export async function queryPlots(filters: PlotQueryFilters): Promise<{
   const store = readLocalStore();
   const blocksSet = new Set(store.plots.map((p) => p.block));
   const sizesSet = new Set(store.plots.map((p) => p.size));
+  const dimMap = new Map<string, number>();
+  const categoryCounts = {
+    Residential: 0,
+    Commercial: 0,
+    'Mixed Use': 0,
+  };
+
+  for (const p of store.plots) {
+    if (p.category === 'Residential') categoryCounts.Residential += 1;
+    else if (p.category === 'Commercial') categoryCounts.Commercial += 1;
+    else if (p.category === 'Mixed Use') categoryCounts['Mixed Use'] += 1;
+    if (p.lengthFt && p.widthFt) {
+      dimMap.set(formatDimensionsLabel(p.lengthFt, p.widthFt), p.lengthFt * p.widthFt);
+    }
+  }
 
   let filtered = [...store.plots];
 
@@ -263,6 +336,16 @@ export async function queryPlots(filters: PlotQueryFilters): Promise<{
   }
   if (filters.size && filters.size !== 'All') {
     filtered = filtered.filter((p) => p.size === filters.size);
+  }
+  if (filters.dimensions && filters.dimensions !== 'All') {
+    const parsed = parseDimensionsQuery(filters.dimensions);
+    if (parsed) {
+      filtered = filtered.filter(
+        (p) => p.lengthFt === parsed.lengthFt && p.widthFt === parsed.widthFt
+      );
+    } else {
+      filtered = filtered.filter((p) => p.dimensions === filters.dimensions);
+    }
   }
   if (filters.block && filters.block !== 'All') {
     filtered = filtered.filter((p) => p.block === filters.block);
@@ -309,6 +392,10 @@ export async function queryPlots(filters: PlotQueryFilters): Promise<{
     facets: {
       blocks: Array.from(blocksSet).sort(),
       sizes: Array.from(sizesSet).sort(),
+      dimensions: Array.from(dimMap.entries())
+        .sort((a, b) => a[1] - b[1])
+        .map(([label]) => label),
+      categoryCounts,
     },
   };
 }

@@ -21,7 +21,7 @@ export function UpdatesPage() {
       title: 'Main Boulevard Carpeted Road & Street Lighting',
       details:
         'Asphalt paving along the 80-foot central corridor and installation of dual-arm solar LED street lights across Block A and Commercial Enclave.',
-      image: '/src/assets/images/colony_boulevard_gate_1795441093203.jpg',
+      image: '/src/assets/images/gwadar_commercial_plaza_1795861377664.jpg',
     },
     {
       date: 'October 2026',
@@ -29,7 +29,7 @@ export function UpdatesPage() {
       title: 'Grand Entrance Gateway & Security Checkpost',
       details:
         'Structural finishing completed on the main entrance arch in Gwadar Old City, Gwadar along with 24/7 security guardhouse and perimeter boundary wall.',
-      image: '/src/assets/images/colony_masterplan_aerial_1795441093561.jpg',
+      image: '/src/assets/images/gwadar_coastal_masterplan_1795861378571.jpg',
     },
     {
       date: 'September 2026',
@@ -37,7 +37,7 @@ export function UpdatesPage() {
       title: 'Sector Pegging & Underground Utility Trenches',
       details:
         'On-ground plot demarcation completed in Blocks A, B, and C, with main water supply and sewerage trunk trenches laid along primary avenues.',
-      image: '/src/assets/images/residential_villa_plot_1795441093419.jpg',
+      image: '/src/assets/images/gwadar_residential_sector_1795861377102.jpg',
     },
   ];
 
@@ -90,27 +90,22 @@ export function GalleryPage() {
       category: 'Coastal Heritage',
     },
     {
-      src: '/src/assets/images/colony_boulevard_gate_1795441093203.jpg',
-      title: 'Main Entrance Gateway & Palm Boulevard',
-      category: 'Infrastructure',
-    },
-    {
-      src: '/src/assets/images/colony_masterplan_aerial_1795441093561.jpg',
-      title: 'Coastal Aerial Master Plan Layout',
+      src: '/src/assets/images/gwadar_coastal_masterplan_1795861378571.jpg',
+      title: 'Gwadar & Makran Coastal Aerial Master Plan',
       category: 'Master Plan',
     },
     {
-      src: '/src/assets/images/residential_villa_plot_1795441093419.jpg',
-      title: 'Block A Modern Coastal Villa Sector',
+      src: '/src/assets/images/gwadar_residential_sector_1795861377102.jpg',
+      title: 'Block A Modern Coastal Residential Sector',
       category: 'Residential',
     },
     {
-      src: '/src/assets/images/commercial_plaza_plot_1795441093119.jpg',
-      title: 'Main Boulevard Commercial Enclave',
+      src: '/src/assets/images/gwadar_commercial_plaza_1795861377664.jpg',
+      title: 'Gwadar Main Boulevard Commercial Enclave',
       category: 'Commercial',
     },
     {
-      src: '/src/assets/images/mixed_use_corner_plot_1795441093434.jpg',
+      src: '/src/assets/images/gwadar_mixed_avenue_1795861378469.jpg',
       title: 'Mixed-Use Retail & Apartment Corner',
       category: 'Mixed Use',
     },
@@ -197,7 +192,7 @@ export function AnnouncementsPage() {
       date: 'November 18, 2026',
       ref: 'JHS-ANN-2026-11',
       title: 'Online Booking Requests Open for Residential Blocks A & B',
-      body: 'Prospective homeowners may now browse live available plots (from 700 sq ft to 4,500 sq ft) and submit official booking inquiries directly through our portal. No advance online payment is required at inquiry stage.',
+      body: 'Prospective homeowners may now browse live available plots (from 20×35 ft to 50×90 ft) and submit official booking inquiries directly through our portal. No advance online payment is required at inquiry stage.',
     },
     {
       date: 'November 05, 2026',

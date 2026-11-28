@@ -1,10 +1,10 @@
-import { ChevronLeft, ChevronRight, RotateCcw, Search } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Phone, RotateCcw, Search } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import BookingModal from '../components/BookingModal';
 import PlotCard from '../components/PlotCard';
 import { api } from '../services/api';
-import { Plot } from '../types';
+import { Plot, PlotFacets } from '../types';
 
 const PRICE_RANGES = [
   { label: 'All Prices', min: '', max: '' },
@@ -14,19 +14,29 @@ const PRICE_RANGES = [
   { label: 'Above PKR 1.2 Cr', min: '12000000', max: '' },
 ];
 
-const AREA_RANGES = [
-  { label: 'All Areas (sq ft)', min: '', max: '' },
-  { label: 'Under 1,000 sq ft', min: '', max: '999' },
-  { label: '1,000 – 2,000 sq ft', min: '1000', max: '2000' },
-  { label: '2,001 – 3,500 sq ft', min: '2001', max: '3500' },
-  { label: 'Above 3,500 sq ft', min: '3501', max: '' },
+const CATEGORY_TABS = [
+  { value: 'All', label: 'All Categories' },
+  { value: 'Residential', label: 'Residential Plots' },
+  { value: 'Commercial', label: 'Commercial Plots' },
+  { value: 'Mixed Use', label: 'Mixed Use Plots' },
 ];
+
+const DEFAULT_FACETS: PlotFacets = {
+  blocks: [],
+  sizes: [],
+  dimensions: [],
+  categoryCounts: {
+    Residential: 0,
+    Commercial: 0,
+    'Mixed Use': 0,
+  },
+};
 
 export default function PlotsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [category, setCategory] = useState(searchParams.get('category') || 'All');
-  const [areaIdx, setAreaIdx] = useState(0);
+  const [dimensions, setDimensions] = useState(searchParams.get('dimensions') || 'All');
   const [block, setBlock] = useState(searchParams.get('block') || 'All');
   const [status, setStatus] = useState(searchParams.get('status') || 'All');
   const [priceIdx, setPriceIdx] = useState(0);
@@ -36,34 +46,41 @@ export default function PlotsPage() {
   const [plots, setPlots] = useState<Plot[]>([]);
   const [total, setTotal] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
-  const [facets, setFacets] = useState<{ blocks: string[]; sizes: string[] }>({
-    blocks: [],
-    sizes: [],
-  });
+  const [facets, setFacets] = useState<PlotFacets>(DEFAULT_FACETS);
   const [loading, setLoading] = useState(true);
   const [bookingPlot, setBookingPlot] = useState<Plot | null>(null);
 
   useEffect(() => {
-    const paramCat = searchParams.get('category');
-    const paramBlock = searchParams.get('block');
-    if (paramCat) setCategory(paramCat);
-    if (paramBlock) setBlock(paramBlock);
+    setCategory(searchParams.get('category') || 'All');
+    setDimensions(searchParams.get('dimensions') || 'All');
+    setBlock(searchParams.get('block') || 'All');
+    setStatus(searchParams.get('status') || 'All');
+    setSearch(searchParams.get('search') || '');
+    setPage(1);
   }, [searchParams]);
+
+  const updateUrlParam = (key: string, value: string) => {
+    const next = new URLSearchParams(searchParams);
+    if (!value || value === 'All') {
+      next.delete(key);
+    } else {
+      next.set(key, value);
+    }
+    setSearchParams(next);
+  };
 
   const fetchPlots = useCallback(async () => {
     setLoading(true);
     const priceRange = PRICE_RANGES[priceIdx] || PRICE_RANGES[0];
-    const areaRange = AREA_RANGES[areaIdx] || AREA_RANGES[0];
     try {
       const { data } = await api.get('/plots', {
         params: {
           category: category !== 'All' ? category : undefined,
+          dimensions: dimensions !== 'All' ? dimensions : undefined,
           block: block !== 'All' ? block : undefined,
           status: status !== 'All' ? status : undefined,
           minPrice: priceRange.min || undefined,
           maxPrice: priceRange.max || undefined,
-          minArea: areaRange.min || undefined,
-          maxArea: areaRange.max || undefined,
           search: search.trim() || undefined,
           page,
           limit: 9,
@@ -73,14 +90,19 @@ export default function PlotsPage() {
       setTotal(data.total || 0);
       setTotalPages(data.totalPages || 1);
       if (data.facets) {
-        setFacets(data.facets);
+        setFacets({
+          blocks: data.facets.blocks || [],
+          sizes: data.facets.sizes || [],
+          dimensions: data.facets.dimensions || [],
+          categoryCounts: data.facets.categoryCounts || DEFAULT_FACETS.categoryCounts,
+        });
       }
     } catch {
       setPlots([]);
     } finally {
       setLoading(false);
     }
-  }, [category, areaIdx, block, status, priceIdx, search, page]);
+  }, [category, dimensions, block, status, priceIdx, search, page]);
 
   useEffect(() => {
     fetchPlots();
@@ -88,13 +110,26 @@ export default function PlotsPage() {
 
   const handleReset = () => {
     setCategory('All');
-    setAreaIdx(0);
+    setDimensions('All');
     setBlock('All');
     setStatus('All');
     setPriceIdx(0);
     setSearch('');
     setPage(1);
     setSearchParams({});
+  };
+
+  const totalInventoryCount =
+    facets.categoryCounts.Residential +
+    facets.categoryCounts.Commercial +
+    facets.categoryCounts['Mixed Use'];
+
+  const getTabCount = (val: string) => {
+    if (val === 'All') return totalInventoryCount;
+    if (val === 'Residential') return facets.categoryCounts.Residential;
+    if (val === 'Commercial') return facets.categoryCounts.Commercial;
+    if (val === 'Mixed Use') return facets.categoryCounts['Mixed Use'];
+    return 0;
   };
 
   return (
@@ -106,14 +141,47 @@ export default function PlotsPage() {
             Available Plots &amp; Inventory
           </h1>
           <p className="text-slate-300 mt-2 max-w-2xl text-sm sm:text-base">
-            Filter live residential, commercial, and mixed-use plots at Juddi Housing Scheme Pasni by area range (sq ft), sector block, price bracket, and availability status.
+            Filter live residential, commercial, and mixed-use plots at Juddi Housing Scheme Pasni by category, dimensions (Length &times; Width ft), block, price bracket, and availability status.
           </p>
         </div>
       </section>
 
       <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Filter & Search Bar */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-5 mb-8">
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 mb-8 space-y-4">
+          {/* Category Tabs */}
+          <div className="flex flex-wrap items-center gap-2 pb-4 border-b border-slate-100">
+            {CATEGORY_TABS.map((tab) => {
+              const active = category === tab.value;
+              const count = getTabCount(tab.value);
+              return (
+                <button
+                  key={tab.value}
+                  type="button"
+                  onClick={() => {
+                    setCategory(tab.value);
+                    setPage(1);
+                    updateUrlParam('category', tab.value);
+                  }}
+                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-colors cursor-pointer ${
+                    active
+                      ? 'bg-[#0B1F3A] text-white'
+                      : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                  }`}
+                >
+                  <span>{tab.label}</span>
+                  <span
+                    className={`font-mono text-xs tabular-nums px-1.5 py-0.5 rounded ${
+                      active ? 'bg-amber-400 text-[#07162B]' : 'bg-white text-slate-600'
+                    }`}
+                  >
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-3.5">
             {/* Search */}
             <div className="lg:col-span-2 relative">
@@ -125,18 +193,19 @@ export default function PlotsPage() {
                   setSearch(e.target.value);
                   setPage(1);
                 }}
-                placeholder="Search plot #, title, block..."
+                placeholder="Search plot #, title, block, ft × ft..."
                 className="w-full pl-10 pr-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400"
               />
             </div>
 
-            {/* Category */}
+            {/* Category Dropdown */}
             <select
               aria-label="Filter by category"
               value={category}
               onChange={(e) => {
                 setCategory(e.target.value);
                 setPage(1);
+                updateUrlParam('category', e.target.value);
               }}
               className="px-3 py-2.5 rounded-lg border border-slate-300 bg-white text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-400"
             >
@@ -146,19 +215,21 @@ export default function PlotsPage() {
               <option value="Mixed Use">Mixed Use</option>
             </select>
 
-            {/* Area Range (sq ft) */}
+            {/* Dimensions (ft x ft) */}
             <select
-              aria-label="Filter by area range"
-              value={areaIdx}
+              aria-label="Filter by dimensions (ft × ft)"
+              value={dimensions}
               onChange={(e) => {
-                setAreaIdx(Number(e.target.value));
+                setDimensions(e.target.value);
                 setPage(1);
+                updateUrlParam('dimensions', e.target.value);
               }}
               className="px-3 py-2.5 rounded-lg border border-slate-300 bg-white text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-400"
             >
-              {AREA_RANGES.map((range, idx) => (
-                <option key={range.label} value={idx}>
-                  {range.label}
+              <option value="All">All Dimensions (ft &times; ft)</option>
+              {facets.dimensions.map((dim) => (
+                <option key={dim} value={dim}>
+                  {dim}
                 </option>
               ))}
             </select>
@@ -170,6 +241,7 @@ export default function PlotsPage() {
               onChange={(e) => {
                 setBlock(e.target.value);
                 setPage(1);
+                updateUrlParam('block', e.target.value);
               }}
               className="px-3 py-2.5 rounded-lg border border-slate-300 bg-white text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-400"
             >
@@ -188,6 +260,7 @@ export default function PlotsPage() {
               onChange={(e) => {
                 setStatus(e.target.value);
                 setPage(1);
+                updateUrlParam('status', e.target.value);
               }}
               className="px-3 py-2.5 rounded-lg border border-slate-300 bg-white text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-400"
             >
@@ -198,7 +271,7 @@ export default function PlotsPage() {
             </select>
           </div>
 
-          <div className="mt-4 pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-4">
+          <div className="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-4">
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-xs font-semibold text-slate-500 mr-1">
                 Price Range:
@@ -250,20 +323,43 @@ export default function PlotsPage() {
             ))}
           </div>
         ) : plots.length === 0 ? (
-          <div className="bg-white border border-slate-200 rounded-2xl p-12 text-center">
+          <div className="bg-white border border-slate-200 rounded-2xl p-10 sm:p-12 text-center max-w-2xl mx-auto">
             <h3 className="font-display text-lg font-bold text-[#0B1F3A]">
-              No matching plots found
+              {category !== 'All' &&
+              dimensions === 'All' &&
+              block === 'All' &&
+              status === 'All' &&
+              priceIdx === 0 &&
+              !search.trim()
+                ? `No ${category} plots are currently listed`
+                : 'No matching plots found'}
             </h3>
-            <p className="text-sm text-slate-600 mt-1">
-              Try adjusting your category, price range, or block filters.
+            <p className="text-sm text-slate-600 mt-2 leading-relaxed">
+              {category !== 'All' &&
+              dimensions === 'All' &&
+              block === 'All' &&
+              status === 'All' &&
+              priceIdx === 0 &&
+              !search.trim()
+                ? `Our allotment desk has not published ${category.toLowerCase()} plots yet, or current inventory is listed under other categories (${totalInventoryCount} total plot${totalInventoryCount === 1 ? '' : 's'} listed).`
+                : 'Try adjusting your category, dimensions (ft × ft), price range, or block filters.'}
             </p>
-            <button
-              type="button"
-              onClick={handleReset}
-              className="mt-4 px-5 py-2.5 rounded-lg bg-[#0B1F3A] text-white text-sm font-semibold hover:bg-[#112D54]"
-            >
-              Show All Plots
-            </button>
+            <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
+              <button
+                type="button"
+                onClick={handleReset}
+                className="px-5 py-2.5 rounded-lg bg-[#0B1F3A] text-white text-sm font-semibold hover:bg-[#112D54] cursor-pointer"
+              >
+                View All Available Plots
+              </button>
+              <Link
+                to="/contact"
+                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-lg border border-slate-300 text-[#0B1F3A] text-sm font-semibold hover:bg-slate-50"
+              >
+                <Phone className="w-4 h-4 text-amber-600" />
+                <span>Call Sales Desk (0321 5552244)</span>
+              </Link>
+            </div>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

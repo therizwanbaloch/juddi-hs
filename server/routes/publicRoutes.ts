@@ -30,6 +30,7 @@ router.get('/plots', async (req, res) => {
     const result = await queryPlots({
       category: asOptionalString(req.query.category),
       size: asOptionalString(req.query.size),
+      dimensions: asOptionalString(req.query.dimensions),
       block: asOptionalString(req.query.block),
       status: asOptionalString(req.query.status),
       minPrice: asOptionalNumber(req.query.minPrice),

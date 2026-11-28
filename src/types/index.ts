@@ -35,6 +35,17 @@ export interface Plot {
   updatedAt: string;
 }
 
+export interface PlotFacets {
+  blocks: string[];
+  sizes: string[];
+  dimensions: string[];
+  categoryCounts: {
+    Residential: number;
+    Commercial: number;
+    'Mixed Use': number;
+  };
+}
+
 export interface Order {
   _id: string;
   orderId: string;

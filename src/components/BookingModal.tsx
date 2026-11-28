@@ -173,7 +173,7 @@ export function BookingForm({
             <option value="">Choose an available plot...</option>
             {selectablePlots.map((p) => (
               <option key={p._id} value={p._id}>
-                {p.plotNumber} — {p.title} ({p.lengthFt}×{p.widthFt} ft · {p.areaSqFt.toLocaleString()} sq ft · {formatPKR(p.price)})
+                {p.plotNumber} — {p.title} ({p.lengthFt}×{p.widthFt} ft · {formatPKR(p.price)})
               </option>
             ))}
           </select>
@@ -187,7 +187,7 @@ export function BookingForm({
             </div>
             {activePlot && (
               <div className="text-xs text-slate-500 mt-0.5 tabular-nums">
-                {activePlot.lengthFt} &times; {activePlot.widthFt} ft ({activePlot.areaSqFt.toLocaleString()} sq ft) &middot; {formatPKR(activePlot.price)}
+                {activePlot.lengthFt} &times; {activePlot.widthFt} ft &middot; {formatPKR(activePlot.price)}
               </div>
             )}
           </div>

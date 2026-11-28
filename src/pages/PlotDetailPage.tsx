@@ -168,9 +168,9 @@ export default function PlotDetailPage() {
                   </div>
                 </div>
                 <div className="sm:text-right">
-                  <div className="text-xs text-slate-500">Rate per sq ft</div>
+                  <div className="text-xs text-slate-500">Dimensions (Length &times; Width)</div>
                   <div className="font-mono text-lg font-bold text-amber-700 tabular-nums mt-0.5">
-                    {formatPKR(Math.round(plot.pricePerSqFt))} / sq ft
+                    {plot.lengthFt} &times; {plot.widthFt} ft
                   </div>
                 </div>
               </div>
@@ -184,15 +184,9 @@ export default function PlotDetailPage() {
                   </div>
                 </div>
                 <div>
-                  <div className="text-xs text-slate-500">Dimensions (L × W)</div>
+                  <div className="text-xs text-slate-500">Dimensions (Length &times; Width)</div>
                   <div className="font-mono font-semibold text-sm text-[#0B1F3A] mt-0.5 tabular-nums">
-                    {plot.lengthFt} × {plot.widthFt} ft
-                  </div>
-                </div>
-                <div>
-                  <div className="text-xs text-slate-500">Total Area</div>
-                  <div className="font-semibold text-sm text-[#0B1F3A] mt-0.5 tabular-nums">
-                    {plot.areaSqFt.toLocaleString('en-US')} sq ft
+                    {plot.lengthFt} &times; {plot.widthFt} ft
                   </div>
                 </div>
                 <div>

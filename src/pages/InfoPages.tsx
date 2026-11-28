@@ -75,8 +75,8 @@ export function AboutPage() {
 
           <div className="lg:col-span-6 rounded-2xl overflow-hidden border border-slate-200 aspect-[16/10] bg-slate-100">
             <img
-              src="/src/assets/images/colony_boulevard_gate_1795441093203.jpg"
-              alt="Juddi Housing Scheme Pasni Grand Entrance"
+              src="/src/assets/images/gwadar_residential_sector_1795861377102.jpg"
+              alt="Juddi Housing Scheme Pasni coastal community in Gwadar"
               referrerPolicy="no-referrer"
               className="w-full h-full object-cover"
             />
@@ -355,25 +355,25 @@ export function MasterPlanPage() {
   const zones = [
     {
       name: 'Block A — Executive Coastal Zone',
-      sizes: '2,275 – 4,500 sq ft Residential',
+      sizes: '35×65 ft – 50×90 ft Residential',
       roads: '60 ft & 80 ft Carpeted Roads',
       highlights: 'Adjacent to Main Entrance Gate and Central Park.',
     },
     {
       name: 'Block B — Family Residential Zone',
-      sizes: '700 – 1,125 sq ft Residential',
+      sizes: '20×35 ft – 25×45 ft Residential',
       roads: '40 ft Internal Streets',
       highlights: 'Walkable access to Neighborhood Mosque & School.',
     },
     {
       name: 'Block C — Mixed-Use Coastal Avenue',
-      sizes: '1,350 – 2,275 sq ft Mixed Use',
+      sizes: '30×45 ft – 35×65 ft Mixed Use',
       roads: '60 ft – 80 ft Avenue',
       highlights: 'Zoned for retail ground floors and upper apartments.',
     },
     {
       name: 'Commercial Enclave',
-      sizes: '900 – 1,800 sq ft Commercial',
+      sizes: '30×30 ft – 30×60 ft Commercial',
       roads: '100 ft Main Commercial Boulevard',
       highlights: 'Prime business visibility in Gwadar Old City, Gwadar.',
     },
@@ -389,8 +389,8 @@ export function MasterPlanPage() {
         <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
           <div className="aspect-[16/9] bg-slate-100">
             <img
-              src="/src/assets/images/colony_masterplan_aerial_1795441093561.jpg"
-              alt="Juddi Housing Scheme Pasni Master Plan Render"
+              src="/src/assets/images/gwadar_coastal_masterplan_1795861378571.jpg"
+              alt="Juddi Housing Scheme Pasni Gwadar Coastal Master Plan"
               referrerPolicy="no-referrer"
               className="w-full h-full object-cover"
             />
@@ -454,22 +454,22 @@ export function BlocksPage() {
   const blockDefs = [
     {
       name: 'Block A',
-      subtitle: 'Executive 2,275 – 4,500 sq ft Residential Sector',
+      subtitle: 'Executive 35×65 ft – 50×90 ft Residential Sector',
       desc: 'Wide avenues adjacent to the main gateway, central park, and Jamia Mosque.',
     },
     {
       name: 'Block B',
-      subtitle: 'Family 700 – 1,125 sq ft Residential Sector',
+      subtitle: 'Family 20×35 ft – 25×45 ft Residential Sector',
       desc: 'Quiet residential streets close to neighborhood green belts and community school.',
     },
     {
       name: 'Block C',
-      subtitle: 'Mixed-Use Coastal Avenue Sector (1,350 – 2,275 sq ft)',
+      subtitle: 'Mixed-Use Coastal Avenue Sector (30×45 ft – 35×65 ft)',
       desc: 'Dual residential and retail-approved plots designed for modern coastal living.',
     },
     {
       name: 'Commercial Enclave',
-      subtitle: '900 – 1,800 sq ft Commercial Boulevard',
+      subtitle: '30×30 ft – 30×60 ft Commercial Boulevard',
       desc: 'Direct frontage on the 100-foot main commercial spine in Gwadar Old City, Gwadar.',
     },
   ];

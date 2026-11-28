@@ -50,8 +50,8 @@ export default function PlotCard({ plot, onBookNow }: PlotCardProps) {
             Plot {plot.plotNumber}
           </span>
           <span aria-hidden="true">·</span>
-          <span className="tabular-nums">
-            {plot.lengthFt} × {plot.widthFt} ft ({plot.areaSqFt.toLocaleString('en-US')} sq ft)
+          <span className="tabular-nums font-semibold text-slate-700">
+            {plot.lengthFt} × {plot.widthFt} ft
           </span>
           <span aria-hidden="true">·</span>
           <span>{plot.block}</span>
@@ -73,9 +73,6 @@ export default function PlotCard({ plot, onBookNow }: PlotCardProps) {
             <div className="text-xs text-slate-500">Total Price</div>
             <div className="font-display text-lg font-bold text-[#0B1F3A] tabular-nums">
               {formatPKR(plot.price)}
-            </div>
-            <div className="text-[11px] font-mono text-slate-500 tabular-nums">
-              {formatPKR(Math.round(plot.pricePerSqFt))} / sq ft
             </div>
           </div>
 

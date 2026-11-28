@@ -37,21 +37,24 @@ const WHY_INVEST = [
 
 const CATEGORIES = [
   {
+    key: 'Residential' as const,
     title: 'Residential Plots',
-    subtitle: '700 – 4,500 sq ft Coastal Plots',
-    image: '/src/assets/images/residential_villa_plot_1795441093419.jpg',
+    subtitle: '20×35 – 50×90 ft Coastal Plots',
+    image: '/src/assets/images/gwadar_residential_sector_1795861377102.jpg',
     to: '/plots?category=Residential',
   },
   {
+    key: 'Commercial' as const,
     title: 'Commercial Plots',
-    subtitle: '900 – 1,800 sq ft Main Boulevard',
-    image: '/src/assets/images/commercial_plaza_plot_1795441093119.jpg',
+    subtitle: '30×30 – 30×60 ft Main Boulevard',
+    image: '/src/assets/images/gwadar_commercial_plaza_1795861377664.jpg',
     to: '/plots?category=Commercial',
   },
   {
+    key: 'Mixed Use' as const,
     title: 'Mixed Use Plots',
-    subtitle: 'Retail Ground + Coastal Apartments',
-    image: '/src/assets/images/mixed_use_corner_plot_1795441093434.jpg',
+    subtitle: '30×45 – 35×65 ft Retail + Apartments',
+    image: '/src/assets/images/gwadar_mixed_avenue_1795861378469.jpg',
     to: '/plots?category=Mixed%20Use',
   },
 ];
@@ -62,24 +65,20 @@ const GALLERY_PREVIEW = [
     caption: 'Juddi Housing Scheme Coastal Shoreline Landmark',
   },
   {
-    src: '/src/assets/images/colony_boulevard_gate_1795441093203.jpg',
-    caption: 'Main Entrance Gate & Boulevard',
+    src: '/src/assets/images/gwadar_coastal_masterplan_1795861378571.jpg',
+    caption: 'Gwadar & Makran Coast Aerial Master Plan',
   },
   {
-    src: '/src/assets/images/residential_villa_plot_1795441093419.jpg',
+    src: '/src/assets/images/gwadar_residential_sector_1795861377102.jpg',
     caption: 'Block A Residential Avenue',
   },
   {
-    src: '/src/assets/images/commercial_plaza_plot_1795441093119.jpg',
-    caption: 'Commercial Boulevard Enclave',
+    src: '/src/assets/images/gwadar_commercial_plaza_1795861377664.jpg',
+    caption: 'Gwadar Commercial Boulevard Enclave',
   },
   {
-    src: '/src/assets/images/mixed_use_corner_plot_1795441093434.jpg',
+    src: '/src/assets/images/gwadar_mixed_avenue_1795861378469.jpg',
     caption: 'Mixed-Use Corner Developments',
-  },
-  {
-    src: '/src/assets/images/colony_masterplan_aerial_1795441093561.jpg',
-    caption: 'Aerial Master Plan Layout',
   },
 ];
 
@@ -115,12 +114,17 @@ const ANNOUNCEMENTS = [
     date: 'Nov 05, 2026',
     title: 'Commercial Boulevard Frontage Allocation Schedule',
     detail:
-      '900 sq ft and 1,800 sq ft commercial plots facing the main approach road are now open for inspection.',
+      '30 × 30 ft and 30 × 60 ft commercial plots facing the main approach road are now open for inspection.',
   },
 ];
 
 export default function HomePage() {
   const [plots, setPlots] = useState<Plot[]>([]);
+  const [categoryCounts, setCategoryCounts] = useState({
+    Residential: 0,
+    Commercial: 0,
+    'Mixed Use': 0,
+  });
   const [loadingPlots, setLoadingPlots] = useState(true);
   const [bookingPlot, setBookingPlot] = useState<Plot | null>(null);
 
@@ -129,7 +133,12 @@ export default function HomePage() {
     api
       .get('/plots', { params: { limit: 12 } })
       .then(({ data }) => {
-        if (active) setPlots(data.plots || []);
+        if (active) {
+          setPlots(data.plots || []);
+          if (data.facets?.categoryCounts) {
+            setCategoryCounts(data.facets.categoryCounts);
+          }
+        }
       })
       .catch(() => {
         if (active) setPlots([]);
@@ -224,11 +233,11 @@ export default function HomePage() {
               </div>
             </div>
             <div>
-              <div className="font-display text-2xl font-bold text-[#0B1F3A]">
-                700 – 4,500 sq ft
+              <div className="font-display text-2xl font-bold text-[#0B1F3A] tabular-nums">
+                20×35 – 50×90 ft
               </div>
               <div className="text-xs text-slate-500 mt-0.5">
-                Residential &amp; Commercial Sizes
+                Dimensions (Length &times; Width)
               </div>
             </div>
             <div>
@@ -266,8 +275,8 @@ export default function HomePage() {
               </p>
               <div className="mt-4 rounded-xl overflow-hidden aspect-[16/9] border border-slate-200 bg-slate-100">
                 <img
-                  src="/src/assets/images/colony_boulevard_gate_1795441093203.jpg"
-                  alt="Juddi Housing Scheme main entrance boulevard"
+                  src="/src/assets/images/gwadar_residential_sector_1795861377102.jpg"
+                  alt="Juddi Housing Scheme Pasni coastal residential avenue in Gwadar"
                   referrerPolicy="no-referrer"
                   className="w-full h-full object-cover"
                 />
@@ -388,31 +397,36 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {CATEGORIES.map((cat) => (
-              <Link
-                key={cat.title}
-                to={cat.to}
-                className="group rounded-2xl overflow-hidden border border-slate-200 bg-white hover:shadow-md transition-shadow"
-              >
-                <div className="aspect-[4/3] overflow-hidden bg-slate-100">
-                  <img
-                    src={cat.image}
-                    alt={cat.title}
-                    referrerPolicy="no-referrer"
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                  />
-                </div>
-                <div className="p-4 bg-[#0B1F3A] text-white flex items-center justify-between gap-3">
-                  <div>
-                    <div className="font-display font-bold text-base">
-                      {cat.title}
-                    </div>
-                    <div className="text-xs text-slate-300 mt-0.5">{cat.subtitle}</div>
+            {CATEGORIES.map((cat) => {
+              const count = categoryCounts[cat.key];
+              return (
+                <Link
+                  key={cat.title}
+                  to={cat.to}
+                  className="group rounded-2xl overflow-hidden border border-slate-200 bg-white hover:shadow-md transition-shadow"
+                >
+                  <div className="aspect-[4/3] overflow-hidden bg-slate-100">
+                    <img
+                      src={cat.image}
+                      alt={cat.title}
+                      referrerPolicy="no-referrer"
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                    />
                   </div>
-                  <ArrowRight className="w-4 h-4 text-amber-400 shrink-0 transition-transform group-hover:translate-x-1" />
-                </div>
-              </Link>
-            ))}
+                  <div className="p-4 bg-[#0B1F3A] text-white flex items-center justify-between gap-3">
+                    <div>
+                      <div className="font-display font-bold text-base">
+                        {cat.title}
+                      </div>
+                      <div className="text-xs text-slate-300 mt-0.5">
+                        {cat.subtitle} &middot; {count} {count === 1 ? 'Plot' : 'Plots'}
+                      </div>
+                    </div>
+                    <ArrowRight className="w-4 h-4 text-amber-400 shrink-0 transition-transform group-hover:translate-x-1" />
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -462,58 +476,82 @@ export default function HomePage() {
           </div>
 
           {/* Available Residential Plots */}
-          {residentialPlots.length > 0 && (
-            <div>
-              <div className="flex items-end justify-between gap-4 mb-6">
-                <div>
-                  <h3 className="font-display text-xl sm:text-2xl font-bold text-[#0B1F3A]">
-                    Available Residential Plots
-                  </h3>
-                  <p className="text-sm text-slate-600 mt-1">
-                    Peaceful family blocks near parks, schools, and the Jamia Mosque.
-                  </p>
-                </div>
-                <Link
-                  to="/plots?category=Residential"
-                  className="text-sm font-semibold text-amber-600 hover:text-amber-700 whitespace-nowrap"
-                >
-                  All Residential &rarr;
-                </Link>
+          <div>
+            <div className="flex items-end justify-between gap-4 mb-6">
+              <div>
+                <h3 className="font-display text-xl sm:text-2xl font-bold text-[#0B1F3A]">
+                  Available Residential Plots
+                </h3>
+                <p className="text-sm text-slate-600 mt-1">
+                  Peaceful family blocks near parks, schools, and the Jamia Mosque.
+                </p>
               </div>
+              <Link
+                to="/plots?category=Residential"
+                className="text-sm font-semibold text-amber-600 hover:text-amber-700 whitespace-nowrap"
+              >
+                All Residential &rarr;
+              </Link>
+            </div>
+            {residentialPlots.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {residentialPlots.map((plot) => (
                   <PlotCard key={plot._id} plot={plot} onBookNow={setBookingPlot} />
                 ))}
               </div>
-            </div>
-          )}
-
-          {/* Commercial & Mixed-Use Plots */}
-          {commercialPlots.length > 0 && (
-            <div>
-              <div className="flex items-end justify-between gap-4 mb-6">
-                <div>
-                  <h3 className="font-display text-xl sm:text-2xl font-bold text-[#0B1F3A]">
-                    Commercial &amp; Mixed-Use Plots
-                  </h3>
-                  <p className="text-sm text-slate-600 mt-1">
-                    High-footfall main boulevard frontage in Gwadar Old City, Gwadar.
-                  </p>
-                </div>
+            ) : (
+              <div className="p-6 rounded-xl bg-white border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-sm text-slate-600">
+                <span>
+                  No Residential plots are currently listed. Contact our sales desk (0321 5552244) for upcoming allotments.
+                </span>
                 <Link
-                  to="/plots?category=Commercial"
-                  className="text-sm font-semibold text-amber-600 hover:text-amber-700 whitespace-nowrap"
+                  to="/plots?category=Residential"
+                  className="px-4 py-2 rounded-lg border border-slate-300 text-[#0B1F3A] font-semibold text-xs hover:bg-slate-50 whitespace-nowrap self-start sm:self-auto"
                 >
-                  All Commercial &rarr;
+                  Open Residential Filter
                 </Link>
               </div>
+            )}
+          </div>
+
+          {/* Commercial & Mixed-Use Plots */}
+          <div>
+            <div className="flex items-end justify-between gap-4 mb-6">
+              <div>
+                <h3 className="font-display text-xl sm:text-2xl font-bold text-[#0B1F3A]">
+                  Commercial &amp; Mixed-Use Plots
+                </h3>
+                <p className="text-sm text-slate-600 mt-1">
+                  High-footfall main boulevard frontage in Gwadar Old City, Gwadar.
+                </p>
+              </div>
+              <Link
+                to="/plots?category=Commercial"
+                className="text-sm font-semibold text-amber-600 hover:text-amber-700 whitespace-nowrap"
+              >
+                All Commercial &rarr;
+              </Link>
+            </div>
+            {commercialPlots.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {commercialPlots.map((plot) => (
                   <PlotCard key={plot._id} plot={plot} onBookNow={setBookingPlot} />
                 ))}
               </div>
-            </div>
-          )}
+            ) : (
+              <div className="p-6 rounded-xl bg-white border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-sm text-slate-600">
+                <span>
+                  No Commercial or Mixed-Use plots are currently listed. Contact our sales desk (0321 5552244) for boulevard availability.
+                </span>
+                <Link
+                  to="/plots?category=Commercial"
+                  className="px-4 py-2 rounded-lg border border-slate-300 text-[#0B1F3A] font-semibold text-xs hover:bg-slate-50 whitespace-nowrap self-start sm:self-auto"
+                >
+                  Open Commercial Filter
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
       </section>
 
@@ -578,8 +616,8 @@ export default function HomePage() {
             <div className="lg:col-span-7 bg-white border border-slate-200 rounded-2xl overflow-hidden flex flex-col">
               <div className="aspect-[16/9] bg-slate-100 overflow-hidden">
                 <img
-                  src="/src/assets/images/colony_masterplan_aerial_1795441093561.jpg"
-                  alt="Juddi Housing Scheme Pasni Aerial Master Plan"
+                  src="/src/assets/images/gwadar_coastal_masterplan_1795861378571.jpg"
+                  alt="Juddi Housing Scheme Pasni Aerial Master Plan in Gwadar"
                   referrerPolicy="no-referrer"
                   className="w-full h-full object-cover"
                 />
@@ -636,7 +674,7 @@ export default function HomePage() {
               </Link>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
               {GALLERY_PREVIEW.map((img) => (
                 <Link
                   key={img.src}
